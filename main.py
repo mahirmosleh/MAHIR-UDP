@@ -27,15 +27,15 @@ from google_play_scraper import app as play_scraper
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from protobuf_decoder.protobuf_decoder import Parser
-from message_ids import MESSAGE_ID_TO_NAME
-import thunderFF_pb2
+from PXP import MESSAGE_ID_TO_NAME
+import XEROXMODS_pb2
 
 # ==================== WEB DASHBOARD ====================
-from dashboard_server import bot_state, start_web_dashboard
+from PAPAX_server import bot_state, start_web_dashboard
 
 # ==================== CONFIGURATION ====================
 WEB_HOST = "0.0.0.0"
-WEB_PORT = 8080
+WEB_PORT = 20335
 ACCOUNTS_FILE = "accounts.json"
 TOKEN_CACHE_FILE = "token_cache.json"
 DEVICES_FILE = "devices.json"  # 🔥 NEW: Persistent device storage
@@ -553,14 +553,21 @@ async def decode_protobuf(data):
     parsed_results_dict = await parse_results(parsed_results)
     return json.dumps(parsed_results_dict)
 
+
+
+import uuid
+import traceback
+from datetime import datetime
+
 async def build_majorlogin_payload(open_id, access_token, platform, client_version, device_info):
     try:
-        proto = thunderFF_pb2.MajorLoginReq()
+        proto = XEROXMODS_pb2.MajorLoginReq()
         proto.event_time = str(datetime.now())[:-7]
         proto.game_name = "free fire"
         proto.platform_id = int(platform)
         
-        proto.client_version = "1.132.1"
+        # --- STABLE VERSION SYNC ---
+        proto.client_version = str(client_version) if client_version else "1.132.1"
         proto.client_version_code = "2019116753"
         proto.platform_sdk_id = 1
         proto.login_by = 3
@@ -568,33 +575,39 @@ async def build_majorlogin_payload(open_id, access_token, platform, client_versi
         proto.open_id_type = str(platform)
         proto.origin_platform_type = str(platform)
         proto.primary_platform_type = str(platform)
+        # -------------------------------------------------
         
-        proto.system_software = str(device_info.get("system_software", "Android OS 9 / API-28 (PQ3B.190801.10101846/G9650ZHU2ARC6)"))
-        proto.system_hardware = str(device_info.get("brand", "Handheld"))
-        proto.device_type = str(device_info.get("model", "Handheld"))
-        proto.screen_width = int(device_info.get("screen_width", 1920))
-        proto.screen_height = int(device_info.get("screen_height", 1080))
-        proto.screen_dpi = str(device_info.get("screen_dpi", "280"))
-        proto.processor_details = str(device_info.get("processor_details", "ARM64 FP ASIMD AES VMH | 2865 | 4"))
-        proto.memory = int(device_info.get("memory", 3003))
-        proto.gpu_renderer = str(device_info.get("gpu_renderer", "Adreno (TM) 640"))
-        proto.gpu_version = "OpenGL ES 3.1 v1.46"
-        proto.unique_device_id = str(device_info.get("unique_device_id", "Google|34a7dcdf-a7d5-4cb6-8d7e-3b0e448a0c57"))
-        proto.client_ip = str(device_info.get("client_ip", "223.191.51.89"))
+        # --- DYNAMIC DEVICE DATA (Unique per account to prevent mass bans) ---
+        proto.system_software = str(device_info.get("system_software", "Android OS 11 / API-30"))
+        proto.system_hardware = str(device_info.get("brand", "Samsung"))
+        proto.device_type = str(device_info.get("model", "SM-G998B"))
+        proto.screen_width = int(device_info.get("screen_width", 1080))
+        proto.screen_height = int(device_info.get("screen_height", 2400))
+        proto.screen_dpi = str(device_info.get("screen_dpi", "420"))
+        proto.processor_details = str(device_info.get("processor_details", "ARM64"))
+        proto.memory = int(device_info.get("memory", 6144))
+        proto.gpu_renderer = str(device_info.get("gpu_renderer", "Adreno (TM) 660"))
+        proto.gpu_version = "OpenGL ES 3.2"
         
-        proto.telecom_operator = "Verizon"
-        proto.network_operator_a = "Verizon"
+        # Generate a unique device ID if not provided in device_info to avoid shared blacklists
+        default_uuid = f"Google|{str(uuid.uuid4())}"
+        proto.unique_device_id = str(device_info.get("unique_device_id", default_uuid))
+        # ------------------------------------------------
+        
+        proto.telecom_operator = "Jio"
+        proto.network_operator_a = "Jio"
         proto.network_type = "WIFI"
         proto.network_type_a = "WIFI"
         proto.cpu_type = 2
         proto.cpu_architecture = "64"
-        proto.graphics_api = "OpenGLES2"
+        proto.graphics_api = "OpenGLES3"
         proto.language = "en"
         proto.open_id = str(open_id)
         proto.access_token = str(access_token)
         proto.reg_avatar = 1
         proto.channel_type = 3
         
+        # Sub-message handling
         if hasattr(proto, "memory_available"):
             proto.memory_available.version = 55
             proto.memory_available.hidden_value = 81
@@ -618,7 +631,9 @@ async def build_majorlogin_payload(open_id, access_token, platform, client_versi
         proto.extra_info = "KqsHTymw5/5GB23YGniUYN2/q47GATrq7eFeRatf0NkwLKEMQ0PK5BKEk72dPflAxUlEBir6Vtey83XqF593qsl8hwY="
         proto.android_engine_init_flag = 110009
         proto.if_push = 1
-        proto.is_vpn = 0 # don't on this
+        
+        # CRITICAL FIX: Disable VPN flag to prevent automated security bans
+        proto.is_vpn = 0 
         
         payload = proto.SerializeToString()
         return await aes_encrypt(payload, AES_KEY, AES_IV)
@@ -627,69 +642,61 @@ async def build_majorlogin_payload(open_id, access_token, platform, client_versi
         traceback.print_exc()
         return None
 
-async def send_majorlogin(data, release_version, access_token, server_url):
+
+async def send_majorlogin(data, release_version, server_url):
     try:
         url = f"{server_url}MajorLogin"
-        req_headers = {
-            'User-Agent': "UnityPlayer/2018.4.12f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)",
-            'Accept': "*/*",
-            'Accept-Encoding': "deflate, gzip",
-            'X-Ga-Sv': "1789534056",
-            'Authorization': f"Bearer {access_token}",
-            'X-Ga': "v1 1",
-            'Releaseversion': str(release_version),
-            'Content-Type': "application/octet-stream",
-            'X-Unity-Version': "2018.4.12f1",
-            'PlAy_VeR': "1.132.1",
-            'Ob_VeR': str(release_version),
-            'LoGiN_UrL': url
-        }
+        req_headers = headers.copy()
+        req_headers["ReleaseVersion"] = str(release_version)
         
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+        response = await client.post(url, headers=req_headers, data=data)
+        if response.status_code != 200:
+            print(f"[-] MajorLogin failed with status code: {response.status_code}")
+            return None
+            
+        response_content = response.content
+        if not response_content or len(response_content) < 20:
+            print("[-] MajorLogin response content too short.")
+            return None
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, headers=req_headers, data=data, ssl=ssl_context) as response:
-                if response.status != 200:
-                    return None
-                    
-                response_content = await response.read()
-                if not response_content or len(response_content) < 20:
-                    return None
+        # 1. Direct parse attempt
+        try:
+            res_proto = XEROXMODS_pb2.MajorLoginRes()
+            res_proto.ParseFromString(response_content)
+            if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
+                return res_proto
+        except Exception:
+            pass
 
-                try:
-                    res_proto = thunderFF_pb2.MajorLoginRes()
-                    res_proto.ParseFromString(response_content)
-                    if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
-                        return res_proto
-                except Exception:
-                    pass
+        # 2. Standard OB55 64-byte header offset check
+        if len(response_content) > 64:
+            try:
+                res_proto = XEROXMODS_pb2.MajorLoginRes()
+                res_proto.ParseFromString(response_content[64:])
+                if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
+                    return res_proto
+            except Exception:
+                pass
 
-                if len(response_content) > 64:
-                    try:
-                        res_proto = thunderFF_pb2.MajorLoginRes()
-                        res_proto.ParseFromString(response_content[64:])
-                        if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
-                            return res_proto
-                    except Exception:
-                        pass
+        # 3. Dynamic offset search fallback
+        for offset in range(min(128, len(response_content))):
+            try:
+                candidate = XEROXMODS_pb2.MajorLoginRes()
+                candidate.ParseFromString(response_content[offset:])
+                if getattr(candidate, "region", None) and getattr(candidate, "token", None):
+                    return candidate
+            except Exception:
+                continue
 
-                for offset in range(min(128, len(response_content))):
-                    try:
-                        candidate = thunderFF_pb2.MajorLoginRes()
-                        candidate.ParseFromString(response_content[offset:])
-                        if getattr(candidate, "region", None) and getattr(candidate, "token", None):
-                            return candidate
-                    except Exception:
-                        continue
-
-                fallback_proto = thunderFF_pb2.MajorLoginRes()
-                fallback_proto.ParseFromString(response_content)
-                return fallback_proto
-                
+        fallback_proto = XEROXMODS_pb2.MajorLoginRes()
+        fallback_proto.ParseFromString(response_content)
+        return fallback_proto
+        
     except Exception as e:
+        print(f"[-] Error in send_majorlogin request: {e}")
+        traceback.print_exc()
         return None
+
 
 async def send_getlogin(data, base_url, token, release_version):
     try:
@@ -703,7 +710,7 @@ async def send_getlogin(data, base_url, token, release_version):
             return None
         response_content = response.content
 
-        res_proto = thunderFF_pb2.GetLoginDataRes()
+        res_proto = XEROXMODS_pb2.GetLoginDataRes()
         parsed_successfully = False
         try:
             res_proto.ParseFromString(response_content)
@@ -715,7 +722,7 @@ async def send_getlogin(data, base_url, token, release_version):
         if not parsed_successfully:
             for offset in range(min(128, len(response_content))):
                 try:
-                    candidate = thunderFF_pb2.GetLoginDataRes()
+                    candidate = XEROXMODS_pb2.GetLoginDataRes()
                     candidate.ParseFromString(response_content[offset:])
                     if candidate.functional_addrs or candidate.informational_addrs:
                         res_proto = candidate
@@ -760,7 +767,7 @@ async def send_keep_alive(region="BD"):
 
 async def start_game_lone_wolf(region, client_version, writer, key, iv):
     packet = bytes.fromhex("080112800a0a010b102b3a110a044944433110aa011a064555524f50453a100a044944433210311a064555524f504540014a0801090a0b1219202758016291090a8001303838463832424630324139363736373032303130313030303030303030303030303136303030313030313530303032323246393745454530463030303030303436373632353134303030303030303030303030303030303030303030303030303030303030303030303030303066663030303030303030636163666131366410241afb02735d5e571400024a775d45414d1a041b1c001f11010449715f4243481a001e1d071c1703004b1a4066785c524570735c51486775421b5c5a4c07504042685a63610816054e19025e75196001477c015165406370195f5547404e4550640103020f1304064863754268676c755f65576e40467e5f0a417a4701026d675d6e73670b1108495a4c6a0b78470b740065645e525a057258425f584a447d4e6759440c11044e7c596d7f4b625f7d04055a47505c4e1d6b5b4107447d7201057d7f0f14084e430457674f7e517d72015172415d027473577c4d615f79535256780911030f4d5e027a797f614165067806505d53777750475e75064257076500460817014e741e7e5078487e7a7c465e7669767153497064605a7376677773550d160148037e18675966787f4c42607a645f577e7b441b460776026b18685d0b110205490060020f70676175654674706671797f41067346677c4e06585e780f15074c57047b40517075415f6364027259674b5b0166407f7340600407770a22047a5d5c52300b3a0a167305067162727516134208312e3133302e3232480350015ae90403626253513635686e556f4e36416456324b796f566c636f477776484f624e56526c4d727073504b4f43654177616848494176795556497273743752737149734a7a786b3247525268377a2f637664626d504f6a73552f79626d38547a4c69586d2f474351696d494b53486833447955726f39515152756c34545350626d6d624b7949565937545671577059455372323646572f59624578507338514f706d317372785455736c30796a434144444d4f34616a654b615753366361496c554b4963797a494e396d52516f715277687939797257476d337a644345337a6a61436f492f5a585233656f65365a42647a64677654636b6b665733356e4d4c6a6a565072564b6433523172756174394e50514150724a5546627859696c4c5a3859707336654d5447666b6649793574666a526c314d4648706b51774c6373374439656378566c41636f374e664f6d2b30654756466c4434744478706771385533595973587645384842502f70666c767a737138316a32524f4d7857437556445442492f684735625462773166456e4249725162762b636144775147696f74554e316d4c4b77734379456f4766706746614251457645672b736a764c4c78704743334c304a5344532f74526169504354553344374e6249306547516651622f5a466f4c36455630775a324d6f583932414c572f5049752f56634663584e70596b356f7966326151416a536971486a2f363276354843644f525551303578754e6171795251625653704654303137655237675255636b4966366c6f447476342b514e4a4670766d74757077707774396a5a5974437a4b56743657726d6e36785837706658456251555434684f3758a201050803108703a201050804108103a20105080510c001a20105081d10cc01a2010408161078a20105080e10af01a201020815")
-    proto = thunderFF_pb2.StartMatch()
+    proto = XEROXMODS_pb2.StartMatch()
     proto.ParseFromString(packet)
     if hasattr(proto.main, 'region_list') and len(proto.main.region_list) > 0:
         proto.main.region_list[0].region = region
