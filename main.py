@@ -558,119 +558,137 @@ async def build_majorlogin_payload(open_id, access_token, platform, client_versi
         proto = thunderFF_pb2.MajorLoginReq()
         proto.event_time = str(datetime.now())[:-7]
         proto.game_name = "free fire"
-        proto.platform_id = 1 if str(platform) in ["1", "4"] else int(platform)
-        proto.client_version = client_version
-        proto.client_version_code = "2019121229"
+        proto.platform_id = int(platform)
         
-        # --- INJECTING PERSISTENT DYNAMIC DEVICE DATA ---
-        proto.system_software = device_info.get("system_software", "Android OS 12 / API-31 (SP1A.210812.016.C2/user.dxu.20260701.180839)")
-        proto.system_hardware = device_info.get("brand", "Handheld")
-        proto.device_type = device_info.get("model", "Handheld")
-        proto.screen_width = int(device_info.get("screen_width", 1600))
-        proto.screen_height = int(device_info.get("screen_height", 900))
-        proto.screen_dpi = str(device_info.get("screen_dpi", "300"))
-        proto.processor_details = device_info.get("processor_details", "x86-64 SSE3 SSE4.1 SSE4.2 AVX | 2400 | 4")
-        proto.memory = int(device_info.get("memory", 5951))
-        proto.gpu_renderer = device_info.get("gpu_renderer", "Adreno (TM) 640")
-        proto.unique_device_id = device_info.get("unique_device_id", "Google|725030d8-6585-4f55-bcca-a6df7e59935b")
-        proto.client_ip = device_info.get("client_ip", "103.145.112.210")
-        # ------------------------------------------------
+        proto.client_version = "1.132.1"
+        proto.client_version_code = "2019116753"
+        proto.platform_sdk_id = 1
+        proto.login_by = 3
+        proto.login_open_id_type = int(platform)
+        proto.open_id_type = str(platform)
+        proto.origin_platform_type = str(platform)
+        proto.primary_platform_type = str(platform)
         
-        proto.telecom_operator = "Citycell"
-        proto.network_operator_a = "Citycell"
+        proto.system_software = str(device_info.get("system_software", "Android OS 9 / API-28 (PQ3B.190801.10101846/G9650ZHU2ARC6)"))
+        proto.system_hardware = str(device_info.get("brand", "Handheld"))
+        proto.device_type = str(device_info.get("model", "Handheld"))
+        proto.screen_width = int(device_info.get("screen_width", 1920))
+        proto.screen_height = int(device_info.get("screen_height", 1080))
+        proto.screen_dpi = str(device_info.get("screen_dpi", "280"))
+        proto.processor_details = str(device_info.get("processor_details", "ARM64 FP ASIMD AES VMH | 2865 | 4"))
+        proto.memory = int(device_info.get("memory", 3003))
+        proto.gpu_renderer = str(device_info.get("gpu_renderer", "Adreno (TM) 640"))
+        proto.gpu_version = "OpenGL ES 3.1 v1.46"
+        proto.unique_device_id = str(device_info.get("unique_device_id", "Google|34a7dcdf-a7d5-4cb6-8d7e-3b0e448a0c57"))
+        proto.client_ip = str(device_info.get("client_ip", "223.191.51.89"))
+        
+        proto.telecom_operator = "Verizon"
+        proto.network_operator_a = "Verizon"
         proto.network_type = "WIFI"
         proto.network_type_a = "WIFI"
         proto.cpu_type = 2
         proto.cpu_architecture = "64"
-        proto.gpu_version = "OpenGL ES 3.2"
         proto.graphics_api = "OpenGLES2"
         proto.language = "en"
-        proto.open_id = open_id
-        proto.open_id_type = str(platform)
-        proto.login_open_id_type = int(platform)
-        proto.access_token = access_token
-        proto.login_by = 3
-        proto.platform_sdk_id = 2
-        proto.origin_platform_type = str(platform)
-        proto.primary_platform_type = str(platform)
+        proto.open_id = str(open_id)
+        proto.access_token = str(access_token)
         proto.reg_avatar = 1
         proto.channel_type = 3
         
-        memory_available = proto.memory_available
-        memory_available.version = 55
-        memory_available.hidden_value = 81
+        if hasattr(proto, "memory_available"):
+            proto.memory_available.version = 55
+            proto.memory_available.hidden_value = 81
         
-        proto.external_storage_total = 34308
-        proto.external_storage_available = 30777
+        proto.external_storage_total = 36235
+        proto.external_storage_available = 31335
         proto.internal_storage_total = 2519
-        proto.internal_storage_available = 243
-        proto.game_disk_storage_total = 34308
-        proto.game_disk_storage_available = 32224
-        proto.external_sdcard_total_storage = 34308
-        proto.external_sdcard_avail_storage = 32224
+        proto.internal_storage_available = 703
+        proto.game_disk_storage_total = 26628
+        proto.game_disk_storage_available = 25010
+        proto.external_sdcard_total_storage = 36235
+        proto.external_sdcard_avail_storage = 32992
         
-        proto.library_path = "/data/app/~~UKDdGuy32C5yOa0KZe_ROA==/com.dts.freefireth-UAKF1gjDbXSGfpA07JDTKQ==/lib/arm64"
-        proto.library_token = "b8e0cd5e295eee42f5860d3c86e483dd|/data/app/~~UKDdGuy32C5yOa0KZe_ROA==/com.dts.freefireth-UAKF1gjDbXSGfpA07JDTKQ==/base.apk"
+        proto.library_path = "/data/app/com.dts.freefireth-YPKM8jHEwAJlhpmhDhv5MQ==/lib/arm64"
+        proto.library_token = "5b892aaabd688e571f688053118a162b|/data/app/com.dts.freefireth-YPKM8jHEwAJlhpmhDhv5MQ==/base.apk"
         proto.client_using_version = "7428b253defc164018c604a1ebbfebdf"
-        proto.supported_astc_bitset = 4095
+        proto.supported_astc_bitset = 16383
         proto.analytics_detail = b"FwQVTgUPX1UaUllDDwcWCRBpWAUOUgsvA1snWlBaO1kFYg=="
-        proto.loading_time = 14582
+        proto.loading_time = 13564
         proto.release_channel = "android"
-        proto.extra_info = "KqsHT4tDHGqm9PQ3syB24XA4N6SWy/Q/HfMFTQM+SgxmVqsgPK138ajtCFyVNW/Q7p6hxoenpRjeZ2NphiIosCZ3YDkONB5NAa+zTwNo7iabx/mj"
-        proto.android_engine_init_flag = 111207
+        proto.extra_info = "KqsHTymw5/5GB23YGniUYN2/q47GATrq7eFeRatf0NkwLKEMQ0PK5BKEk72dPflAxUlEBir6Vtey83XqF593qsl8hwY="
+        proto.android_engine_init_flag = 110009
         proto.if_push = 1
-        proto.is_vpn = 0
+        proto.is_vpn = 0 # don't on this
         
         payload = proto.SerializeToString()
         return await aes_encrypt(payload, AES_KEY, AES_IV)
-    except Exception:
+    except Exception as e:
+        print(f"[-] Error building MajorLogin payload: {e}")
+        traceback.print_exc()
         return None
 
-async def send_majorlogin(data, release_version, server_url):
+async def send_majorlogin(data, release_version, access_token, server_url):
     try:
         url = f"{server_url}MajorLogin"
-        req_headers = headers.copy()
-        req_headers["ReleaseVersion"] = release_version
-        response = await client.post(url, headers=req_headers, data=data)
-        if response.status_code != 200:
-            return None
-        response_content = response.content
-        if len(response_content) < 40:
-            return None
+        req_headers = {
+            'User-Agent': "UnityPlayer/2018.4.12f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)",
+            'Accept': "*/*",
+            'Accept-Encoding': "deflate, gzip",
+            'X-Ga-Sv': "1789534056",
+            'Authorization': f"Bearer {access_token}",
+            'X-Ga': "v1 1",
+            'Releaseversion': str(release_version),
+            'Content-Type': "application/octet-stream",
+            'X-Unity-Version': "2018.4.12f1",
+            'PlAy_VeR': "1.132.1",
+            'Ob_VeR': str(release_version),
+            'LoGiN_UrL': url
+        }
+        
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
 
-        # 1. Direct parse
-        res_proto = thunderFF_pb2.MajorLoginRes()
-        try:
-            res_proto.ParseFromString(response_content)
-            if res_proto.region and res_proto.token:
-                return res_proto
-        except Exception:
-            pass
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=req_headers, data=data, ssl=ssl_context) as response:
+                if response.status != 200:
+                    return None
+                    
+                response_content = await response.read()
+                if not response_content or len(response_content) < 20:
+                    return None
 
-        # 2. OB55 64-byte header offset check
-        if len(response_content) > 64:
-            try:
-                res_proto = thunderFF_pb2.MajorLoginRes()
-                res_proto.ParseFromString(response_content[64:])
-                if res_proto.region and res_proto.token:
-                    return res_proto
-            except Exception:
-                pass
+                try:
+                    res_proto = thunderFF_pb2.MajorLoginRes()
+                    res_proto.ParseFromString(response_content)
+                    if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
+                        return res_proto
+                except Exception:
+                    pass
 
-        # 3. Dynamic offset search for OB55 compatibility
-        for offset in range(min(128, len(response_content))):
-            try:
-                candidate = thunderFF_pb2.MajorLoginRes()
-                candidate.ParseFromString(response_content[offset:])
-                if candidate.region and candidate.token:
-                    return candidate
-            except Exception:
-                pass
+                if len(response_content) > 64:
+                    try:
+                        res_proto = thunderFF_pb2.MajorLoginRes()
+                        res_proto.ParseFromString(response_content[64:])
+                        if getattr(res_proto, "region", None) and getattr(res_proto, "token", None):
+                            return res_proto
+                    except Exception:
+                        pass
 
-        res_proto = thunderFF_pb2.MajorLoginRes()
-        res_proto.ParseFromString(response_content)
-        return res_proto
-    except Exception:
+                for offset in range(min(128, len(response_content))):
+                    try:
+                        candidate = thunderFF_pb2.MajorLoginRes()
+                        candidate.ParseFromString(response_content[offset:])
+                        if getattr(candidate, "region", None) and getattr(candidate, "token", None):
+                            return candidate
+                    except Exception:
+                        continue
+
+                fallback_proto = thunderFF_pb2.MajorLoginRes()
+                fallback_proto.ParseFromString(response_content)
+                return fallback_proto
+                
+    except Exception as e:
         return None
 
 async def send_getlogin(data, base_url, token, release_version):
@@ -2096,7 +2114,7 @@ def load_accounts():
 
 async def main():
     print_colored("=" * 60, Colors.CYAN)
-    print_colored("    TEAM 84FF - FreeFire Level Up Bot (Web Dashboard Mode)", Colors.GREEN)
+    print_colored("    MAHIR - FreeFire Level Up Bot (Web Dashboard Mode)", Colors.GREEN)
     print_colored("   Persistent Device ID + TRUE Parallel + Smart DNS", Colors.WHITE)
     print_colored("=" * 60, Colors.CYAN)
     print_info(f"Start Match Interval: {START_MATCH_INTERVAL}s")
