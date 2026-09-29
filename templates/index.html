@@ -23,7 +23,7 @@
             --accent-amber: #ffaa00;
             --text-main: #f0f4fc;
             --text-muted: #8e9bb5;
-            --glass-glow: 0 8px 32px 0 rgba(0, 242, 254, 0.08);
+            --glass-glow: 0 4px 20px 0 rgba(0, 242, 254, 0.06);
         }
 
         * {
@@ -34,19 +34,19 @@
         }
 
         body {
-            background-color: var(--bg-base);
+            background-color: #ffffff;
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.14) 0%, transparent 45%),
                 radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 45%),
                 linear-gradient(180deg, #060913 0%, #0a0e1c 100%);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 24px;
+            padding: 14px;
             overflow-x: hidden;
         }
 
         .container {
-            max-width: 1440px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -55,42 +55,42 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 28px;
+            padding: 12px 18px;
             background: var(--bg-card);
             border: 1px solid var(--border-card);
-            border-radius: 20px;
-            backdrop-filter: blur(16px);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
             box-shadow: var(--glass-glow);
-            margin-bottom: 24px;
+            margin-bottom: 14px;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .logo-box {
-            width: 48px;
-            height: 48px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            border-radius: 14px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 18px;
             color: #fff;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
             animation: pulse-glow 3s infinite alternate;
         }
 
         @keyframes pulse-glow {
-            0% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-            100% { box-shadow: 0 0 25px rgba(127, 0, 255, 0.5); }
+            0% { box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+            100% { box-shadow: 0 0 20px rgba(127, 0, 255, 0.4); }
         }
 
         .brand-text h1 {
-            font-size: 22px;
+            font-size: 14px;
             font-weight: 800;
             letter-spacing: -0.5px;
             background: linear-gradient(90deg, #ffffff, var(--accent-cyan));
@@ -100,31 +100,35 @@
         }
 
         .brand-text p {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 2px;
+            gap: 6px;
+            margin-top: 1px;
+            white-space: nowrap; /* লেখাটি এক লাইনে রাখবে */
         }
+
 
         .live-tag {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             background: rgba(0, 255, 136, 0.12);
             border: 1px solid rgba(0, 255, 136, 0.3);
             color: var(--accent-green);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
+
         .pulse-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             background: var(--accent-green);
             border-radius: 50%;
             animation: blink 1.2s infinite;
@@ -138,32 +142,34 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 18px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 7px 14px;
+            border-radius: 9px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
             border: none;
             outline: none;
+            white-space: nowrap; /* টেক্সট এক লাইনে রাখতে এটি যোগ করুন */
         }
+
 
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
             color: #040914;
-            box-shadow: 0 4px 16px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 3px 12px rgba(0, 242, 254, 0.2);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.35);
         }
 
         .btn-secondary {
@@ -180,37 +186,37 @@
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-card);
-            border-radius: 18px;
-            padding: 20px;
-            backdrop-filter: blur(14px);
+            border-radius: 12px;
+            padding: 12px 16px;
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 12px;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             border-color: var(--border-hover);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--glass-glow);
         }
 
         .stat-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 16px;
         }
 
         .stat-icon.cyan { background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); }
@@ -219,14 +225,14 @@
         .stat-icon.amber { background: rgba(255, 170, 0, 0.15); color: var(--accent-amber); }
 
         .stat-content h3 {
-            font-size: 26px;
+            font-size: 19px;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: #fff;
         }
 
         .stat-content p {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-muted);
             font-weight: 500;
         }
@@ -235,7 +241,7 @@
         .dashboard-main {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 24px;
+            gap: 14px;
         }
 
         @media (max-width: 1024px) {
@@ -246,37 +252,37 @@
         .card-box {
             background: var(--bg-card);
             border: 1px solid var(--border-card);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(16px);
+            border-radius: 14px;
+            padding: 16px;
+            backdrop-filter: blur(12px);
         }
 
         .box-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .box-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .accounts-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 10px;
         }
 
         .account-card {
             background: rgba(10, 15, 30, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 12px 14px;
             transition: all 0.25s ease;
             position: relative;
             overflow: hidden;
@@ -291,49 +297,49 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
 
         .acc-profile {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
         }
 
         .acc-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
             background: linear-gradient(135deg, #1e293b, #334155);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 13px;
             color: var(--accent-cyan);
             border: 1px solid rgba(0, 242, 254, 0.2);
         }
 
         .acc-info h4 {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .region-badge {
             background: rgba(255, 255, 255, 0.08);
             color: #a5b4fc;
-            padding: 2px 7px;
-            border-radius: 6px;
-            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 9px;
             font-weight: 700;
         }
 
         .acc-info span {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             font-family: 'JetBrains Mono', monospace;
         }
@@ -341,11 +347,11 @@
         .acc-status {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
+            gap: 5px;
+            font-size: 11px;
             font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 3px 9px;
+            border-radius: 14px;
         }
 
         .status-online {
@@ -370,28 +376,28 @@
         .exp-box {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
+            gap: 8px;
             background: rgba(0, 0, 0, 0.28);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 14px;
+            padding: 8px 12px;
+            border-radius: 9px;
+            margin-bottom: 10px;
         }
 
         .exp-item {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
         }
 
         .exp-label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 600;
         }
 
         .exp-val {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
             color: #fff;
@@ -401,34 +407,34 @@
             color: var(--accent-green) !important;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .gained-badge {
             background: rgba(0, 255, 136, 0.16);
-            padding: 2px 7px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 700;
         }
 
         /* Level Progress Bar */
         .level-progress {
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
 
         .level-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 6px;
+            font-size: 11px;
+            margin-bottom: 4px;
             font-weight: 600;
         }
 
         .progress-bar-bg {
-            height: 6px;
+            height: 5px;
             background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             position: relative;
         }
@@ -436,7 +442,7 @@
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
-            border-radius: 10px;
+            border-radius: 8px;
             transition: width 0.5s ease;
         }
 
@@ -444,29 +450,30 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 10px;
+            padding-top: 8px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
         .action-btns {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .icon-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-card);
             color: var(--text-muted);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 12px;
         }
 
         .icon-btn:hover {
@@ -490,22 +497,22 @@
 
         .log-stream {
             flex: 1;
-            min-height: 480px;
-            max-height: 600px;
+            min-height: 350px;
+            max-height: 480px;
             background: #03060f;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 10px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
+            font-size: 11px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .log-stream::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
 
         .log-stream::-webkit-scrollbar-thumb {
@@ -514,11 +521,11 @@
         }
 
         .log-item {
-            line-height: 1.4;
+            line-height: 1.3;
             word-break: break-all;
         }
 
-        .log-time { color: #64748b; margin-right: 6px; }
+        .log-time { color: #64748b; margin-right: 5px; }
         .log-info { color: #38bdf8; }
         .log-success { color: #4ade80; }
         .log-warning { color: #fbbf24; }
@@ -541,45 +548,45 @@
         .modal-card {
             background: #0c1224;
             border: 1px solid var(--border-card);
-            border-radius: 20px;
+            border-radius: 14px;
             width: 100%;
-            max-width: 480px;
-            padding: 28px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            max-width: 420px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .modal-header h3 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .form-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 8px;
+            padding: 8px 12px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -590,13 +597,13 @@
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
             color: var(--text-muted);
         }
 
         .empty-state i {
-            font-size: 42px;
-            margin-bottom: 12px;
+            font-size: 36px;
+            margin-bottom: 10px;
             color: rgba(255, 255, 255, 0.1);
         }
     </style>
@@ -610,10 +617,10 @@
                     <i class="fa-solid fa-bolt"></i>
                 </div>
                 <div class="brand-text">
-                    <h1>MAHIR LW <span style="font-weight:400; color:var(--text-muted); font-size:16px;">| LEVEL UP BOT</span></h1>
+                    <h1>MAHIR LW | LEVEL UP BOT <span style="font-weight:400; color:var(--text-muted); font-size:13px;"></span></h1>
                     <p>
                         <span class="live-tag"><span class="pulse-dot"></span> System Live</span>
-                        <span>• Safe Multi-Match Engine</span>
+                        <span>• Safe Multi-Match</span>
                     </p>
                 </div>
             </div>
@@ -680,7 +687,7 @@
                         <i class="fa-solid fa-terminal" style="color:var(--accent-green)"></i>
                         <span>Live Match & Bot Logs</span>
                     </div>
-                    <span style="font-size:12px; color:var(--text-muted);">Real-time</span>
+                    <span style="font-size:11px; color:var(--text-muted);">Real-time</span>
                 </div>
                 <div class="log-stream" id="log-stream">
                     <!-- Logs inserted dynamically -->
@@ -693,7 +700,7 @@
     <div class="modal-overlay" id="add-modal">
         <div class="modal-card">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-user-plus" style="color:var(--accent-cyan); margin-right:8px;"></i> Add New Account</h3>
+                <h3><i class="fa-solid fa-user-plus" style="color:var(--accent-cyan); margin-right:6px;"></i> Add New Account</h3>
                 <button class="icon-btn" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="add-acc-form" onsubmit="submitAddAccount(event)">
@@ -711,7 +718,7 @@
                     </div>
                     <div class="form-group">
                         <label>Guest Password / Secret</label>
-                        <input type="text" class="form-input" id="acc-password" placeholder="e.g. MAHIR.XO.JE">
+                        <input type="text" class="form-input" id="acc-password" placeholder="e.g. ZERO_GRAVITY_4NM38">
                     </div>
                 </div>
                 <div id="token-fields" style="display:none;">
@@ -720,7 +727,7 @@
                         <textarea class="form-input" id="acc-token" rows="3" placeholder="Paste access token here..."></textarea>
                     </div>
                 </div>
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
                     <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Save & Start</button>
                 </div>
@@ -877,7 +884,7 @@
                                     <span>Last match: ${acc.last_match_time || 'Running...'}</span>
                                     <div class="action-btns">
                                         <button class="icon-btn" title="Refresh Profile/EXP" onclick="refreshAccountInfo('${acc.uid}')"><i class="fa-solid fa-rotate"></i></button>
-                                        <button class="icon-btn danger" title="Delete Account" onclick="deleteAccount('${acc.uid}')"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="icon-btn danger" title="Delete Account" onclick="deleteAccount('${acc.uid}')"><link rel="stylesheet" href="..."><i class="fa-solid fa-trash"></i></button>
                                     </div>
                                 </div>
                             </div>
